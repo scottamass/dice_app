@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 
@@ -25,32 +25,53 @@ class DicePage extends StatefulWidget {
 
 class _DicePageState extends State<DicePage> {
   int diceNo = 1;
+  dynamic previousRoll = '';
+  void playSound() async {
+    final player = AudioCache();
+    player.play('dice.mp3');
+  }
 
- void rollDice() async {
-  setState(() {
-    diceNo = 21;
-    print('roll');
-  });
+  void rollDice() async {
+    setState(() {
+      previousRoll = diceNo;
+      diceNo = 21;
+      playSound();
+      print('roll');
+    });
 
-  await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(Duration(seconds: 1));
 
-  setState(() {
-    diceNo = Random().nextInt(6) + 1; // 1-6
-  });
-}
-
+    setState(() {
+      diceNo = Random().nextInt(6) + 1; // 1-6
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Row(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 50.0), // Add some top padding
+            child: Text(
+              'Your last roll was: $previousRoll',
+              style: TextStyle(fontSize: 20),
+            ),
+          ),
           Expanded(
-            child: TextButton(
-              onPressed: () {
-                rollDice();
-              },
-              child: Image.asset('images/dice$diceNo.jpg'),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    rollDice();
+                  },
+                  child: Image.asset('images/dice$diceNo.jpg'),
+                ),
+              ],
             ),
           ),
         ],
