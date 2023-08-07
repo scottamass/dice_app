@@ -1,7 +1,13 @@
-# dice_app
+# D20
 
-A new Flutter project.
+A Virtual D20 Dice application 
 
+![Alt text](screenshots/simulator_screenshot_5A27647F-4D62-4421-AF8C-E445D4D00928.png)
+
+This application simulates a virtual D20 dice for your board games 
+
+## TO-DO
+in the current state this only goes up to 7 i need to add the remaining numbers 
 ## Getting Started
 
 This project is a starting point for a Flutter application.
