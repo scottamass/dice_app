@@ -26,6 +26,8 @@ class DicePage extends StatefulWidget {
 class _DicePageState extends State<DicePage> {
   int diceNo = 1;
   dynamic previousRoll = '';
+  bool multipleDiceMode = false; // New variable to track the mode
+
   void playSound() async {
     final player = AudioCache();
     player.play('dice.mp3');
@@ -46,6 +48,12 @@ class _DicePageState extends State<DicePage> {
     });
   }
 
+  void toggleDiceMode() {
+    setState(() {
+      multipleDiceMode = !multipleDiceMode;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -54,25 +62,40 @@ class _DicePageState extends State<DicePage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Padding(
-            padding: const EdgeInsets.only(top: 50.0), // Add some top padding
+            padding: const EdgeInsets.only(top: 50.0),
             child: Text(
               'Your last roll was: $previousRoll',
               style: TextStyle(fontSize: 20),
             ),
           ),
-          Expanded(
-            child: Column(
+          if (multipleDiceMode)
+            Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                TextButton(
-                  onPressed: () {
-                    rollDice();
-                  },
-                  child: Image.asset('images/dice$diceNo.jpg'),
-                ),
+                for (int i = 0; i < 2; i++) // Display two dice
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: TextButton(
+                      onPressed: () {
+                        rollDice();
+                      },
+                      child: Image.asset('images/dice$diceNo.jpg'),
+                    ),
+                  ),
               ],
+            )
+          else
+            TextButton(
+              onPressed: () {
+                rollDice();
+              },
+              child: Image.asset('images/dice$diceNo.jpg'),
             ),
+          ElevatedButton(
+            onPressed: () {
+              toggleDiceMode();
+            },
+            child: Text(multipleDiceMode ? 'Single Die' : 'Multiple Dice'),
           ),
         ],
       ),
